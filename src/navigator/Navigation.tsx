@@ -6,20 +6,46 @@ import { RegisterScreen } from '../screens/RegisterScreen';
 import { View } from 'react-native';
 import { ActivityIndicator, MD2Colors } from 'react-native-paper';
 import styles from '../theme/styles';
-
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../configs/firebaseConfig';
-import { FormUpdateUser } from '../screens/GameScreens/FormUpdateUser';
+import { FormUpdateUser, verification } from '../screens/GameScreens/FormUpdateUser';
+import { WelcomeGame } from '../screens/GameScreens/WelcomeGame';
+import { PressButton } from '../screens/GameScreens/PressButton';
+import { LogoutScreen } from '../screens/GameScreens/LogoutScreen';
+import { ExitScreen } from '../screens/GameScreens/ExitScreen';
+import { LogoutReverseScreen } from '../screens/GameScreens/LogoutReverseScreen';
 
 const Stack = createStackNavigator();
 
+// Interface - Rutas
+interface Routes {
+    name: string;
+    screen: () => JSX.Element; // elemento JSX
+    headerShow?: boolean;
+}
+
 export const Navigation = () => {
+
+    // Arreglo que contenga las rutas si el usuario no esta autenticado
+    const routes: Routes[] = [
+        { name: "Login", screen: LoginScreen },
+        { name: "Register", screen: RegisterScreen },
+        //Ruta de verificación
+        { name: "Verification", screen: FormUpdateUser },
+        // Rutas accesibles luego del login y la verificación
+        { name: "Welcome", screen: WelcomeGame },
+        { name: "Exit", screen: ExitScreen },
+        { name: "LogoutR", screen: LogoutReverseScreen },
+        { name: "Press", screen: PressButton },
+        { name: "Logout", screen: LogoutScreen },
+    ];
 
     const [isAuth, setIsAuth] = useState<boolean>(false);
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
+        initialRouteName();
         setIsLoading(true);
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -29,6 +55,19 @@ export const Navigation = () => {
         })
     }, []);
 
+    let name: string = '';
+
+    const initialRouteName = () => {
+        
+        if (isAuth && verification) {
+            name = 'Welcome';
+        } else if (!isAuth){
+            name = 'Login';
+        } else if (!verification){
+            name = 'Verification';
+        }
+    }
+
     return (
         <>
             {isLoading ? (
@@ -36,15 +75,16 @@ export const Navigation = () => {
                     <ActivityIndicator size={25} animating={true} color={MD2Colors.red800} />
                 </View>
             ) : (
-                <Stack.Navigator>
+                <Stack.Navigator initialRouteName={ name }>
                     {
-                        !isAuth ?
-                            <>
-                                <Stack.Screen name="Login" options={{ headerShown: false }} component={LoginScreen} />
-                                <Stack.Screen name="Register" options={{ headerShown: false }} component={RegisterScreen} />
-                            </>
-                            :
-                            <Stack.Screen name="Home" options={{ headerShown: false }} component={FormUpdateUser} />
+                        routes.map((item, index) => (
+                            <Stack.Screen
+                                key= {index}
+                                name= {item.name}
+                                options={{headerShown: false}}
+                                component={item.screen}
+                            />
+                        ))
                     }
                 </Stack.Navigator>
             )}

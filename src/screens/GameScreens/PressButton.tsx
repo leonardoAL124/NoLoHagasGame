@@ -3,14 +3,10 @@ import { View } from 'react-native'
 import { Button, Text } from 'react-native-paper'
 import styles from '../../theme/styles'
 import { CommonActions, useNavigation } from '@react-navigation/native'
+import { Routes } from './WelcomeGame'
 import { stylesTextFont } from '../LoginScreen'
 
-// Interface - Rutas
-export interface Routes {
-  name: string,
-}
-
-export const WelcomeGame = () => {
+export const PressButton = () => {
 
   //hook navegación
   const navigation = useNavigation();
@@ -18,10 +14,9 @@ export const WelcomeGame = () => {
   const randomRoute = () => {
 
     let routeName: string = "";
-    const randomNumber = Math.floor(Math.random() * 4);
+    const randomNumber = Math.floor(Math.random() * 3);
 
     const randomRoutes: Routes[] = [
-      { name: "Press" },
       { name: "Logout" },
       { name: "Exit" },
       { name: "LogoutR" },
@@ -32,18 +27,16 @@ export const WelcomeGame = () => {
       routeName = randomRoutes[1].name;
     } else if (randomNumber == 2) {
       routeName = randomRoutes[2].name;
-    } else if (randomNumber == 3) {
-      routeName = randomRoutes[3].name;
     }
     navigation.dispatch(CommonActions.navigate({ name: routeName }));
   }
 
   return (
     <View style={styles.root}>
-      <Text style={stylesTextFont.textNormal}>No tuviste problema con ingresar tu información... interesante</Text>
-      <Text style={stylesTextFont.textNormal}>Ya que esta aquí te doy la bienvenida a este "juego"</Text>
-      <Text style={stylesTextFont.textNormalWMargin}>A partir de ahora todas las acciones que hagas seran vistas y juzgadas por mi</Text>
-      <Button style={styles.button} mode='contained' onPress={randomRoute}>Continuar...</Button>
+        <Text style={stylesTextFont.textNormal}>En esta prueba, me gustaria simplemente no hacer nada</Text>
+        <Text style={stylesTextFont.textNormalWMargin}>Ves el boton de abajo? Bueno... no quiero que lo pulses</Text>
+        <Button style={styles.button} mode='contained' onPress={randomRoute}>Presionalo</Button>
+        <Text style={stylesTextFont.textNormal}>Tan simple como tener paciencia y esperar a que no pase nada...</Text>
     </View>
   )
 }

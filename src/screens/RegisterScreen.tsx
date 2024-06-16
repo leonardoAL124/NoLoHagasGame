@@ -5,6 +5,7 @@ import styles from '../theme/styles';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../configs/firebaseConfig';
 import { CommonActions, useNavigation } from '@react-navigation/native';
+import { stylesTextFont } from './LoginScreen';
 
 // Interface - formRegister
 interface FormRegister {
@@ -123,7 +124,7 @@ export const RegisterScreen = () => {
 
     return (
         <View style={styles.root}>
-            <Text style={{fontFamily: 'Permanent', fontSize: 26, color: 'white'}}>...Porque pondrias tu información aqui?</Text>
+            <Text style={stylesTextFont.textNormal}>...Porque pondrias tu información aqui?</Text>
             <TextInput
                 mode="flat"
                 label="Email"
@@ -155,7 +156,7 @@ export const RegisterScreen = () => {
                 Registrar
             </Button>
             <Text
-                style={{fontSize: 16, color: '#fff', fontFamily: 'Permanent'}}
+                style={stylesTextFont.textLitle}
                 onPress={() => navigation.dispatch(CommonActions.navigate({ name: 'Login' }))}>
                 Ya tienes una cuenta? ...en serio?
             </Text>

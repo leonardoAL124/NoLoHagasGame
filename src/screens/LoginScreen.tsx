@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import styles from '../theme/styles'
 import { Button, Snackbar, Text, TextInput } from 'react-native-paper'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../configs/firebaseConfig'
 import { CommonActions, useNavigation } from '@react-navigation/native'
+import { verification } from './GameScreens/FormUpdateUser'
 
 //Interface - mensajes
 interface MessageSnackbar {
@@ -87,6 +88,11 @@ export const LoginScreen = () => {
                 formLogin.email,
                 formLogin.password,
             );
+            if (verification) {
+                navigation.dispatch(CommonActions.navigate({ name: 'Welcome' }));
+            } else {
+                navigation.dispatch(CommonActions.navigate({ name: 'Verification' }));
+            }
             console.log(response);
         } catch (ex) {
             if (!validate) {
@@ -117,7 +123,7 @@ export const LoginScreen = () => {
 
     return (
         <View style={styles.root}>
-            <Text style={{fontFamily: 'Permanent', fontSize: 26, color: 'white'}}>Inicio de Sesión? Porque un juego necesita eso...</Text>
+            <Text style={stylesTextFont.textNormal}>Inicio de Sesión? Porque un juego necesita eso...</Text>
             <TextInput
                 mode="flat"
                 label="Email"
@@ -149,7 +155,7 @@ export const LoginScreen = () => {
                 Iniciar Sesión
             </Button>
             <Text
-                style={{fontSize: 16, color: '#fff', fontFamily: 'Permanent'}}
+                style={stylesTextFont.textLitle}
                 onPress={() => navigation.dispatch(CommonActions.navigate({ name: 'Register' }))}>
                 Quiza quieras ...registrarte?
             </Text>
@@ -162,3 +168,22 @@ export const LoginScreen = () => {
         </View>
     )
 }
+
+export const stylesTextFont = StyleSheet.create({
+    textLitle: {
+        fontSize: 16,
+        color: '#fff',
+        fontFamily: 'Permanent',
+    },
+    textNormal: {
+        fontFamily: 'Permanent',
+        fontSize: 26,
+        color: '#fff',
+    },
+    textNormalWMargin: {
+        fontFamily: 'Permanent',
+        fontSize: 26,
+        color: '#fff',
+        marginLeft: 15,
+    },
+});

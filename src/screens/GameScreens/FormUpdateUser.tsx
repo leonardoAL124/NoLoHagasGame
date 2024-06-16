@@ -5,6 +5,7 @@ import styles from '../../theme/styles'
 import firebase, { updateProfile, PhoneAuthProvider, signInWithCredential } from 'firebase/auth'
 import { auth } from '../../configs/firebaseConfig';
 import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
+import { CommonActions, useNavigation } from '@react-navigation/native'
 
 //Interface - Usuario data
 interface FormUser {
@@ -19,8 +20,12 @@ interface MessageSnackbar {
   color: string,
 }
 
+// Variable booleana
+export let verification: boolean = false
+
 export const FormUpdateUser = () => {
 
+  // Expresiones regulares para verificar los campos
   let validate_number: RegExp = /^([0-9])*$/;
   let validate_name: RegExp = /^[a-zA-Z\s]+$/;
 
@@ -48,6 +53,9 @@ export const FormUpdateUser = () => {
 
   // Hook useRef: verificar el uso del recaptcha
   const recaptchaVerifier = useRef(null);
+
+  //hook navegación
+  const navigation = useNavigation();
 
   //hook useEffect: capturar la data del usuario autenticado
   useEffect(() => {
@@ -86,7 +94,7 @@ export const FormUpdateUser = () => {
         setShowMessage({
           visible: true,
           message: 'Se ha producido un error con el reCaptcha',
-          color: '#2D572C',
+          color: '#8B0000',
         });
       }
     } catch (ex) {
@@ -107,7 +115,8 @@ export const FormUpdateUser = () => {
           color: '#2D572C',
         });
         setShowModal(false);
-        console.log(auth.currentUser);
+        navigation.dispatch(CommonActions.navigate({ name: 'Welcome' }));
+        verification = true;
       }
     } catch (ex) {
       console.error(ex);
@@ -143,6 +152,8 @@ export const FormUpdateUser = () => {
       });
       return;
     } else {
+      console.log(auth.currentUser);
+
       if (formUser.phone !== userAuth!.phoneNumber) {
         await handlerVerifyPhoneNumber(formUser.phone);
         await updateProfile(userAuth!, {
@@ -189,6 +200,7 @@ export const FormUpdateUser = () => {
           </View>
           <Divider />
           <TextInput
+            style={styles.inputs}
             mode='flat'
             label='Escribe el código de verificación'
             textColor='#fff'

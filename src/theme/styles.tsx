@@ -13,6 +13,14 @@ const styles = StyleSheet.create({
         width: '50%',
         backgroundColor: 'gray'
     },
+    redButton: {
+        width: '50%',
+        backgroundColor: '#8B0000',
+    },
+    blueButton: {
+        width: '50%',
+        backgroundColor: '#00008B'
+    },
     inputs: {
         width: '90%',
         backgroundColor: ''
