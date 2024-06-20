@@ -5,7 +5,8 @@ import { Button, Snackbar, Text, TextInput } from 'react-native-paper'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../configs/firebaseConfig'
 import { CommonActions, useNavigation } from '@react-navigation/native'
-import { verification } from './GameScreens/FormUpdateUser'
+import { setAcum } from '../components/PointsCount'
+import { verification } from './FormUpdateUser'
 
 //Interface - mensajes
 interface MessageSnackbar {
@@ -93,6 +94,8 @@ export const LoginScreen = () => {
             } else {
                 navigation.dispatch(CommonActions.navigate({ name: 'Verification' }));
             }
+            //Reiniciar el valor del acumulador cada vez que se logea el usuario
+            setAcum();
             console.log(response);
         } catch (ex) {
             if (!validate) {

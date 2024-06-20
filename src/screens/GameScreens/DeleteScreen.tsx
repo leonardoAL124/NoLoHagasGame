@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { BackHandler, View } from 'react-native'
+import { View } from 'react-native'
 import { Button, Text } from 'react-native-paper'
 import styles from '../../theme/styles'
 import { CommonActions, useNavigation } from '@react-navigation/native'
 import { stylesTextFont } from '../LoginScreen'
+import { deleteUser } from 'firebase/auth'
+import { auth } from '../../configs/firebaseConfig'
 import { storagePoints } from '../../components/PointsCount'
-import { RouteName } from '../../interfaces/routeName'
 import { routeSelector } from '../../components/RandomRoute'
+import { RouteName } from '../../interfaces/routeName'
 
-export const PressButton = () => {
+export const DeleteScreen = () => {
+
+  const user = auth.currentUser;
 
   //hook useState para cambiar el valor del "disabled"
   const [showButton, setShowButton] = useState<boolean>(true);
@@ -26,8 +30,14 @@ export const PressButton = () => {
   //hook navegación
   const navigation = useNavigation();
 
-  const handlerExitApp = () => {
-    BackHandler.exitApp();
+  const handlerDeleteUser = () => {
+    try {
+        deleteUser(user!);
+        navigation.dispatch(CommonActions.navigate({ name: "Login" }));
+    } catch (ex) {
+        console.log(ex);
+        randomRoute();
+    }
   }
 
   const randomRoute = () => {
@@ -35,10 +45,10 @@ export const PressButton = () => {
     let routeName: string = "";
 
     const randomRoutes: RouteName[] = [
+      { name: "Press" },
       { name: "Logout" },
       { name: "Exit" },
       { name: "LogoutR" },
-      { name: "Delete" },
       { name: "Substract" },
       { name: "Rating" },
       { name: "Locate" },
@@ -53,11 +63,12 @@ export const PressButton = () => {
 
   return (
     <View style={styles.root}>
-        <Text style={stylesTextFont.textNormal}>En esta prueba, me gustaria simplemente esperar</Text>
-        <Text style={stylesTextFont.textNormalWMargin}>Ves el boton de abajo? Bueno... no deberias presionarlo</Text>
-        <Button style={styles.redButton} mode='contained' onPress={handlerExitApp}>Presionalo</Button>
-        <Text style={stylesTextFont.textNormal}>Tan simple como tener paciencia y esperar...</Text>
-        <Button disabled={showButton} style={styles.blueButton} mode='contained' onPress={randomRoute}>Continuar</Button>
+        <Text style={stylesTextFont.textNormalWMargin}>Estoy un poco cansado el día de hoy</Text>
+        <Text style={stylesTextFont.textNormalWMargin}>Es solo por tí que tengo q estar aquí...</Text>
+        <Text style={stylesTextFont.textNormalWMargin}>Que te parece si simplemente te vas?</Text>
+        <Button style={styles.redButton} mode='contained' onPress={handlerDeleteUser}>Irse</Button>
+        <Text style={stylesTextFont.textNormal}>Solo vete, no pasa nada, sin ninguna consecuencia...</Text>
+        <Button disabled={showButton} style={styles.blueButton} mode='contained' onPress={randomRoute}>Continuar..</Button>
     </View>
   )
 }

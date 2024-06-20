@@ -3,8 +3,10 @@ import { BackHandler, View } from 'react-native'
 import { Button, Text } from 'react-native-paper'
 import styles from '../../theme/styles'
 import { CommonActions, useNavigation } from '@react-navigation/native'
-import { Routes } from './WelcomeGame'
 import { stylesTextFont } from '../LoginScreen'
+import { storagePoints } from '../../components/PointsCount'
+import { RouteName } from '../../interfaces/routeName'
+import { routeSelector } from '../../components/RandomRoute'
 
 export const ExitScreen = () => {
 
@@ -14,20 +16,21 @@ export const ExitScreen = () => {
   const randomRoute = () => {
 
     let routeName: string = "";
-    const randomNumber = Math.floor(Math.random() * 3);
 
-    const randomRoutes: Routes[] = [
+    const randomRoutes: RouteName[] = [
       { name: "Press" },
       { name: "Logout" },
       { name: "LogoutR" },
+      { name: "Delete" },
+      { name: "Substract" },
+      { name: "Rating" },
+      { name: "Locate" },
+      { name: "Search" },
+      { name: "Touch" },
     ];
-    if (randomNumber == 0) {
-      routeName = randomRoutes[0].name;
-    } else if (randomNumber == 1) {
-      routeName = randomRoutes[1].name;
-    } else if (randomNumber == 2) {
-      routeName = randomRoutes[2].name;
-    }
+
+    routeName = routeSelector(randomRoutes);
+    storagePoints(1);
     navigation.dispatch(CommonActions.navigate({ name: routeName }));
   }
 
@@ -37,7 +40,7 @@ export const ExitScreen = () => {
 
   return (
     <View style={styles.root}>
-        <Text style={stylesTextFont.textNormal}>Esta vez te dire lo que va a pasar</Text>
+        <Text style={stylesTextFont.textNormal}>Te dire lo que va a pasar</Text>
         <Text style={stylesTextFont.textNormalWMargin}>Este boton hace que la aplicación se cierre</Text>
         <Button style={styles.redButton} mode='contained' onPress={handlerExitApp}>Cerrar</Button>
         <Text style={stylesTextFont.textNormal}>Este en cambio hace que continues a la siguiente pantalla</Text>

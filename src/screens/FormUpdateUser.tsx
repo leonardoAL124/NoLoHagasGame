@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { View } from 'react-native'
 import { Button, Divider, IconButton, Modal, Portal, Snackbar, Text, TextInput } from 'react-native-paper'
-import styles from '../../theme/styles'
 import firebase, { updateProfile, PhoneAuthProvider, signInWithCredential } from 'firebase/auth'
-import { auth } from '../../configs/firebaseConfig';
 import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
 import { CommonActions, useNavigation } from '@react-navigation/native'
+import { auth } from '../configs/firebaseConfig';
+import styles from '../theme/styles';
 
 //Interface - Usuario data
 interface FormUser {
